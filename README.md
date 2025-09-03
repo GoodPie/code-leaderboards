@@ -22,3 +22,13 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+## Setting Up
+
+### First User
+
+Run the rails console and enter the following:
+
+```
+User.create(email: "<your_email>", password: "<your_password>")
+```
