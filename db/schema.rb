@@ -104,7 +104,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
   create_table "tenants", force: :cascade do |t|
     t.string "slug", null: false
     t.string "name", null: false
-    t.string "logo"
     t.bigint "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
