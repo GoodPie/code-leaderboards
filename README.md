@@ -23,12 +23,3 @@ Things you may want to cover:
 
 * ...
 
-## Setting Up
-
-### First User
-
-Run the rails console and enter the following:
-
-```
-User.create(email_address: "<your_email>", password: "<your_password>")
-```
