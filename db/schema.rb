@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_055743) do
   create_schema "_realtime"
   create_schema "auth"
   create_schema "extensions"
@@ -24,6 +24,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
   create_schema "vault"
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "extensions.pg_net"
+  enable_extension "extensions.pg_stat_statements"
+  enable_extension "extensions.pgcrypto"
+  enable_extension "extensions.uuid-ossp"
   enable_extension "graphql.pg_graphql"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vault.supabase_vault"
@@ -53,9 +57,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: "member", null: false
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -82,23 +86,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
   end
 
   create_table "tenant_user_roles", force: :cascade do |t|
-    t.bigint "tenant_user_id", null: false
     t.bigint "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "tenant_id"
+    t.bigint "user_id"
     t.index ["role_id"], name: "index_tenant_user_roles_on_role_id"
-    t.index ["tenant_user_id", "role_id"], name: "index_tenant_user_roles_on_membership_and_role", unique: true
-    t.index ["tenant_user_id"], name: "index_tenant_user_roles_on_tenant_user_id"
-  end
-
-  create_table "tenant_users", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "tenant_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tenant_id"], name: "index_tenant_users_on_tenant_id"
-    t.index ["user_id", "tenant_id"], name: "index_tenant_users_on_user_and_tenant", unique: true
-    t.index ["user_id"], name: "index_tenant_users_on_user_id"
+    t.index ["tenant_id"], name: "index_tenant_user_roles_on_tenant_id"
+    t.index ["user_id"], name: "index_tenant_user_roles_on_user_id"
   end
 
   create_table "tenants", force: :cascade do |t|
@@ -142,9 +137,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_041910) do
   add_foreign_key "solutions", "challenges"
   add_foreign_key "solutions", "users"
   add_foreign_key "tenant_user_roles", "roles"
-  add_foreign_key "tenant_user_roles", "tenant_users"
-  add_foreign_key "tenant_users", "tenants"
-  add_foreign_key "tenant_users", "users"
+  add_foreign_key "tenant_user_roles", "tenants"
+  add_foreign_key "tenant_user_roles", "users"
   add_foreign_key "tenants", "users", column: "owner_id"
   add_foreign_key "votes", "solutions"
   add_foreign_key "votes", "users"
