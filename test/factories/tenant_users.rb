@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tenant_user do
-    user { nil }
-    tenant { nil }
+    association :user
+    association :tenant
   end
 end
