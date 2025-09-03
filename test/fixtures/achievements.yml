@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  achievement_type: MyString
+  unlocked_at: 2025-09-03 08:51:34
+  challenge: one
+  metadata: 
+
+two:
+  user: two
+  achievement_type: MyString
+  unlocked_at: 2025-09-03 08:51:34
+  challenge: two
+  metadata: 
