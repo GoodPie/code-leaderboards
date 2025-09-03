@@ -4,8 +4,12 @@ class Tenant < ApplicationRecord
 
   has_one_attached :logo
 
-  has_many :tenant_users
-  has_many :users, through: :tenant_users
+  has_many :tenant_user_roles, dependent: :destroy
+  has_many :users, through: :tenant_user_roles
 
   belongs_to :owner, class_name: "User"
+
+  def add_user(user, role: :member)
+    tenant_user_roles.create(user:, role: Role.find_by(name: role))
+  end
 end
