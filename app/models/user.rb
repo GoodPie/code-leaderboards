@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
+  has_many :sessions
   has_many :solutions
   has_many :votes
   has_many :achievements
