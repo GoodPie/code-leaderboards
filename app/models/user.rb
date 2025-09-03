@@ -3,12 +3,13 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
-  has_many :sessions
   has_many :solutions
   has_many :votes
   has_many :achievements
+  has_many :tenant_users, dependent: :destroy
   has_many :challenges, through: :solutions
-
+  has_many :tenants, through: :tenant_users
+  has_many :roles, through: :tenant_users
 
   scope :active, -> { joins(:solutions).where(solutions: { submitted_at: 30.days.ago.. }).distinct }
 
