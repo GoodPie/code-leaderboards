@@ -1,9 +1,9 @@
 class Solution < ApplicationRecord
   belongs_to :user
   belongs_to :challenge
-  has_many :votes, dependent: :destroy
+  has_many :votes
 
-  has_one_attached :screenshot, dependent: :destroy
+  has_one_attached :screenshot
 
   broadcasts_refreshes
 
@@ -15,10 +15,9 @@ class Solution < ApplicationRecord
   private
 
   def analyze_solution
-
   end
 
   def check_achievements
-
+    AchievementCheckerJob.perform_later(user, self)
   end
 end

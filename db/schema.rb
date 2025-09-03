@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_03_005150) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
   create_schema "_realtime"
   create_schema "auth"
   create_schema "extensions"
@@ -24,13 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005150) do
   create_schema "vault"
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "extensions.pg_net"
-  enable_extension "extensions.pg_stat_statements"
-  enable_extension "extensions.pgcrypto"
-  enable_extension "extensions.uuid-ossp"
-  enable_extension "graphql.pg_graphql"
   enable_extension "pg_catalog.plpgsql"
-  enable_extension "vault.supabase_vault"
 
   create_table "achievements", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -89,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005150) do
     t.string "github_username"
     t.text "bio"
     t.datetime "joined_at"
+    t.string "avatar_url"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
