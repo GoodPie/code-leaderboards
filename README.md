@@ -30,5 +30,5 @@ Things you may want to cover:
 Run the rails console and enter the following:
 
 ```
-User.create(email: "<your_email>", password: "<your_password>")
+User.create(email_address: "<your_email>", password: "<your_password>")
 ```
