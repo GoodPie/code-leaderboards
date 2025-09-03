@@ -23,8 +23,7 @@ class User < ApplicationRecord
     solutions.order(submitted_at: :desc).pluck(:id).each_cons(2).count { |a, b| a + 1 == b }
   end
 
-  def role_for(tenant)
-    tenant_user_roles.find_by(tenant: tenant).role
+    tenant_user_roles.find_by(tenant: tenant)&.role
   end
 
   def total_points
