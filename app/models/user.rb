@@ -7,10 +7,10 @@ class User < ApplicationRecord
   has_many :solutions
   has_many :votes
   has_many :achievements
-  has_many :tenant_users, dependent: :destroy
   has_many :challenges, through: :solutions
-  has_many :tenants, through: :tenant_users
-  has_many :tenant_user_roles, through: :tenant_users
+
+  has_many :tenant_user_roles
+  has_many :tenants, through: :tenant_user_roles
   has_many :roles, through: :tenant_user_roles
 
   scope :active, -> { joins(:solutions).where(solutions: { submitted_at: 30.days.ago.. }).distinct }
@@ -21,6 +21,10 @@ class User < ApplicationRecord
     return 0 if solutions.empty?
 
     solutions.order(submitted_at: :desc).pluck(:id).each_cons(2).count { |a, b| a + 1 == b }
+  end
+
+  def role_for(tenant)
+    tenant_user_roles.find_by(tenant: tenant).role
   end
 
   def total_points
