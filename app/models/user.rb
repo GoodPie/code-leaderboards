@@ -9,7 +9,8 @@ class User < ApplicationRecord
   has_many :tenant_users, dependent: :destroy
   has_many :challenges, through: :solutions
   has_many :tenants, through: :tenant_users
-  has_many :roles, through: :tenant_users
+  has_many :tenant_user_roles, through: :tenant_users
+  has_many :roles, through: :tenant_user_roles
 
   scope :active, -> { joins(:solutions).where(solutions: { submitted_at: 30.days.ago.. }).distinct }
 
