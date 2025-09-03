@@ -201,8 +201,11 @@ GEM
     pg (1.6.2-arm64-darwin)
     pg (1.6.2-x86_64-linux)
     pg (1.6.2-x86_64-linux-musl)
+    pluginator (1.5.0)
     pp (0.6.2)
       prettyprint
+    pre-commit (0.40.0)
+      pluginator (~> 1.5)
     prettyprint (0.2.0)
     prism (1.4.0)
     propshaft (1.2.1)
@@ -379,6 +382,7 @@ DEPENDENCIES
   jsbundling-rails
   kamal
   pg (~> 1.1)
+  pre-commit (~> 0.40.0)
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.2, >= 8.0.2.1)

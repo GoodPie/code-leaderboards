@@ -1,13 +1,15 @@
 class User < ApplicationRecord
   has_secure_password
 
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
   has_many :sessions
   has_many :solutions
   has_many :votes
   has_many :achievements
   has_many :challenges, through: :solutions
 
-  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
   scope :active, -> { joins(:solutions).where(solutions: { submitted_at: 30.days.ago.. }).distinct }
 
   has_one_attached :avatar

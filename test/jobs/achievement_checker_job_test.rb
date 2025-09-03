@@ -2,9 +2,9 @@ require "test_helper"
 
 class AchievementCheckerJobTest < ActiveSupport::TestCase
   setup do
-    @user = User.create!(email_address: "jobtester@example.com", password: "password", password_confirmation: "password")
-    @other_user = User.create!(email_address: "othertester@example.com", password: "password", password_confirmation: "password")
-    @challenge = Challenge.create!(title: "Speed Challenge", description: "", start_date: Time.current, end_date: Time.current + 1.day, difficulty: 1, starter_code: "", test_suite: "")
+    @user = create(:user)
+    @other_user = create(:user)
+    @challenge = create(:challenge)
   end
 
   teardown do
@@ -29,12 +29,17 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
     calls.any? { |call| call[:kwargs][:locals][:achievement].achievement_type == achievement_type }
   end
 
+  def broadcast_achievement_count(calls, achievement_type)
+    return false unless calls.any?
+    calls.filter { |call| call[:kwargs][:locals][:achievement].achievement_type == achievement_type }.length
+  end
+
   test "uses low_priority queue" do
     assert_equal :low_priority, AchievementCheckerJob.queue_name.to_sym
   end
 
   test "awards first_blood to first solution of a challenge and broadcasts" do
-    first_solution = Solution.create!(user: @user, challenge: @challenge, code: "puts 1", lines_of_code: 10, execution_time: 0.01, submitted_at: Time.current - 5.minutes, github_url: "http://example.com/1")
+    first_solution = create(:solution, user: @user, challenge: @challenge, code: "puts 1", lines_of_code: 10, execution_time: 0.01, submitted_at: Time.current - 5.minutes, github_url: "http://example.com/1")
 
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "first_blood").count }, +1 do
@@ -56,7 +61,7 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
 
 
   test "awards speed_demon when execution_time < 1ms" do
-    sol = Solution.create!(user: @user, challenge: @challenge, code: "x", lines_of_code: 10, execution_time: 0.0009, submitted_at: Time.current, github_url: "http://example.com/speed")
+    sol = create(:solution, user: @user, challenge: @challenge, code: "x", lines_of_code: 10, execution_time: 0.0009, submitted_at: Time.current, github_url: "http://example.com/speed")
 
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "speed_demon").count }, +1 do
@@ -67,7 +72,7 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
   end
 
   test "assert broadcast doesn't contain incorrect" do
-    sol = Solution.create!(user: @user, challenge: @challenge, code: "x", lines_of_code: 10, execution_time: 0.0009, submitted_at: Time.current, github_url: "http://example.com/speed")
+    sol = create(:solution, user: @user, challenge: @challenge, code: "x", lines_of_code: 10, execution_time: 0.0009, submitted_at: Time.current, github_url: "http://example.com/speed")
 
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "speed_demon").count }, +1 do
@@ -80,7 +85,7 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
   end
 
   test "awards code_golfer when lines_of_code <= 5" do
-    sol = Solution.create!(user: @user, challenge: @challenge, code: "puts :ok", lines_of_code: 5, execution_time: 0.5, submitted_at: Time.current, github_url: "http://example.com/golf")
+    sol = create(:solution, user: @user, challenge: @challenge, code: "puts :ok", lines_of_code: 5, execution_time: 0.5, submitted_at: Time.current, github_url: "http://example.com/golf")
 
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "code_golfer").count }, +1 do
@@ -92,18 +97,18 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
 
   test "awards night_owl when submitted between midnight and 6 AM" do
     time = Time.current.change(hour: 3, min: 0)
-    sol = Solution.create!(user: @user, challenge: @challenge, code: "puts :zzz", lines_of_code: 10, execution_time: 0.5, submitted_at: time, github_url: "http://example.com/night")
+    sol = create(:solution, user: @user, challenge: @challenge, code: "puts :zzz", lines_of_code: 10, execution_time: 0.5, submitted_at: time, github_url: "http://example.com/night")
 
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "night_owl").count }, +1 do
         perform_job(sol)
       end
-      assert_equal 2, calls.size
+      assert broadcast_contains_achievement(calls, "night_owl")
     end
   end
 
   test "awards streak_keeper when current_streak >= 3" do
-    sol = Solution.create!(user: @user, challenge: @challenge, code: "puts :streak", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current, github_url: "http://example.com/streak")
+    sol = create(:solution, user: @user, challenge: @challenge, code: "puts :streak", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current, github_url: "http://example.com/streak")
 
     @user.stub(:current_streak, 3) do
       capture_broadcasts do |calls|
@@ -116,16 +121,14 @@ class AchievementCheckerJobTest < ActiveSupport::TestCase
   end
 
   test "awards perfectionist when more than one solution for same challenge" do
-    first = Solution.create!(user: @user, challenge: @challenge, code: "puts :a", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current - 10.minutes, github_url: "http://example.com/a")
-    second = Solution.create!(user: @user, challenge: @challenge, code: "puts :b", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current - 5.minutes, github_url: "http://example.com/b")
+    first = create(:solution, user: @user, challenge: @challenge, code: "puts :a", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current - 10.minutes, github_url: "http://example.com/a")
+    second = create(:solution, user: @user, challenge: @challenge, code: "puts :b", lines_of_code: 10, execution_time: 0.5, submitted_at: Time.current - 5.minutes, github_url: "http://example.com/b")
 
-    # Perform on the second submission
     capture_broadcasts do |calls|
       assert_difference -> { Achievement.where(user: @user, achievement_type: "perfectionist").count }, +1 do
         perform_job(second)
       end
-      assert_equal 2, calls.size
+      assert broadcast_contains_achievement(calls, "perfectionist")
     end
   end
-
 end

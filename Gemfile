@@ -52,12 +52,16 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
+  # Use Factory Bot to generate test data [https://github.com/thoughtbot/factory_bot]
   gem "factory_bot_rails", "~> 6.5"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Use pre-commit hooks to run tests and linting [https://github.com/pre-commit/pre-commit]
+  gem "pre-commit", "~> 0.40.0"
 end
 
 group :test do
@@ -65,7 +69,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-
-
-
