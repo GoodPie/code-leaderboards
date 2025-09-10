@@ -38,7 +38,7 @@ The project follows a standard Ruby on Rails MVC architecture.
 
 * To run the development server, use: `bin/dev`
 * This will start the Rails server, and the JavaScript and CSS watchers.
-* The application will be available at `http://localhost:3000`.
+* The application will be available at `http://localhost:3001`.
 
 **4. Running Tests:**
 
