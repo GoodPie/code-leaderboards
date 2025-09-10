@@ -10,7 +10,7 @@
    → If not found: ERROR "No feature spec at {path}"
 2. Fill Technical Context (scan for NEEDS CLARIFICATION)
    → Detect Project Type from context (web=frontend+backend, mobile=app+api)
-   → Set Structure Decision based on project type
+   → Set cision based on project type
 3. Evaluate Constitution Check section below
    → If violations exist: Document in Complexity Tracking
    → If no justification possible: ERROR "Simplify approach first"
