@@ -9,6 +9,6 @@
 :check_remove:
   - :rubocop
   - :rubocop
-:warnings_remove: [ ]
-:warnings_add:
+:warnings_remove:
   - :rubocop
+:warnings_add: [ ]
