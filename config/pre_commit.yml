@@ -1,14 +1,12 @@
 ---
-:checks_remove:
-  - :rubocop
 :checks_add:
-  - :rails
-  - :before_all
-  - :common
-:check_add: [ ]
-:check_remove:
-  - :rubocop
-  - :rubocop
-:warnings_remove:
-  - :rubocop
-:warnings_add: [ ]
+  - tabs
+  - nb_space
+  - whitespace
+  - merge_conflict
+  - debugger
+  - pry
+  - local
+  - console_log
+  - migration
+  - before_all
