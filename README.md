@@ -71,7 +71,7 @@ asdf install
 bundle install
 
 # JS packages
-npm install
+bun install
 ```
 
 ### 2) Create a Supabase project
