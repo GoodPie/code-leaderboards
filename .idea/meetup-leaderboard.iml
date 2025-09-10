@@ -99,9 +99,7 @@
     <orderEntry type="library" scope="PROVIDED" name="parallel (v1.27.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="parser (v3.3.9.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pg (v1.6.2, asdf: 3.4.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="pluginator (v1.5.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pp (v0.6.2, asdf: 3.4.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="pre-commit (v0.40.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="prettyprint (v0.2.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="prism (v1.4.0, asdf: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="propshaft (v1.2.1, asdf: 3.4.2) [gem]" level="application" />

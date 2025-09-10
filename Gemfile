@@ -63,7 +63,6 @@ group :development do
   gem "web-console"
 
   # Use pre-commit hooks to run tests and linting [https://github.com/pre-commit/pre-commit]
-  gem "pre-commit", "~> 0.40.0"
 end
 
 group :test do
