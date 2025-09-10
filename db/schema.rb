@@ -24,10 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_055743) do
   create_schema "vault"
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "extensions.pg_net"
-  enable_extension "extensions.pg_stat_statements"
-  enable_extension "extensions.pgcrypto"
-  enable_extension "extensions.uuid-ossp"
   enable_extension "graphql.pg_graphql"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vault.supabase_vault"
@@ -99,6 +95,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_055743) do
   create_table "tenants", force: :cascade do |t|
     t.string "slug", null: false
     t.string "name", null: false
+    t.string "logo"
     t.bigint "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
