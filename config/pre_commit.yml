@@ -1,7 +1,14 @@
 ---
-:checks_remove: [ ]
-:checks_add:
+:checks_remove:
   - :rubocop
+:checks_add:
   - :rails
   - :before_all
   - :common
+:check_add: [ ]
+:check_remove:
+  - :rubocop
+  - :rubocop
+:warnings_remove: [ ]
+:warnings_add:
+  - :rubocop
