@@ -100,7 +100,7 @@ Edit .env and fill in:
 ```shell script
 # Rails
 RAILS_ENV=development
-PORT=3000
+PORT=3001
 
 # Database (use Supabase's Postgres connection string)
 DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<db>?sslmode=require
@@ -137,7 +137,7 @@ bin/dev
 bin/rails server
 ```
 
-App will be available at http://localhost:3000.
+App will be available at http://localhost:3001.
 
 ## Supabase Auth (Planned Integration)
 
