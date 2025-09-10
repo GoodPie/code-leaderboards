@@ -1,0 +1,7 @@
+---
+:checks_remove: [ ]
+:checks_add:
+  - :rubocop
+  - :rails
+  - :before_all
+  - :common
