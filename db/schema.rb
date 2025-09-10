@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_055743) do
   create_schema "_realtime"
   create_schema "auth"
   create_schema "extensions"
@@ -24,7 +24,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
   create_schema "vault"
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "extensions.pg_net"
+  enable_extension "extensions.pg_stat_statements"
+  enable_extension "extensions.pgcrypto"
+  enable_extension "extensions.uuid-ossp"
+  enable_extension "graphql.pg_graphql"
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "vault.supabase_vault"
 
   create_table "achievements", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -50,6 +56,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", default: "member", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"
@@ -71,6 +83,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
     t.datetime "updated_at", null: false
     t.index ["challenge_id"], name: "index_solutions_on_challenge_id"
     t.index ["user_id"], name: "index_solutions_on_user_id"
+  end
+
+  create_table "tenant_user_roles", force: :cascade do |t|
+    t.bigint "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "tenant_id"
+    t.bigint "user_id"
+    t.index ["role_id"], name: "index_tenant_user_roles_on_role_id"
+    t.index ["tenant_id"], name: "index_tenant_user_roles_on_tenant_id"
+    t.index ["user_id"], name: "index_tenant_user_roles_on_user_id"
+  end
+
+  create_table "tenants", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tenants_on_name"
+    t.index ["owner_id"], name: "index_tenants_on_owner_id"
+    t.index ["slug"], name: "index_tenants_on_slug"
   end
 
   create_table "users", force: :cascade do |t|
@@ -102,6 +136,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_005354) do
   add_foreign_key "sessions", "users"
   add_foreign_key "solutions", "challenges"
   add_foreign_key "solutions", "users"
+  add_foreign_key "tenant_user_roles", "roles"
+  add_foreign_key "tenant_user_roles", "tenants"
+  add_foreign_key "tenant_user_roles", "users"
+  add_foreign_key "tenants", "users", column: "owner_id"
   add_foreign_key "votes", "solutions"
   add_foreign_key "votes", "users"
 end
