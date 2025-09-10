@@ -74,3 +74,5 @@ end
 gem "tailwindcss-ruby", "~> 4.1"
 
 gem "tailwindcss-rails", "~> 4.3"
+
+gem "pre-commit", "~> 0.40.0"
